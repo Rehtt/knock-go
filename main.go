@@ -46,7 +46,7 @@ func main() {
 		panic(err)
 	}
 	knock.servieLogger, _ = s.Logger(make(chan<- error))
-	switch flag.Arg(1) {
+	switch flag.Arg(0) {
 	case "uninstall":
 		err = s.Uninstall()
 	case "install":
@@ -59,7 +59,7 @@ func main() {
 		run()
 	}
 	if err != nil {
-		panic(err)
+		slog.Error(err.Error())
 	}
 
 }
