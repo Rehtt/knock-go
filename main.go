@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/kardianos/service"
 	"log/slog"
 	"net"
 	"os"
@@ -15,10 +16,54 @@ var (
 	serverMode = flag.Bool("s", false, "server mode")
 	port       = flag.Int("port", 9012, "port")
 	key        = flag.String("key", "Knock", "key")
+	knock      = new(Knock)
 )
+
+type Knock struct {
+	servieLogger service.Logger
+}
+
+func (k *Knock) Start(s service.Service) error {
+	k.servieLogger.Info("service start")
+	go run()
+	return nil
+}
+
+func (k *Knock) Stop(s service.Service) error {
+	//TODO implement me
+	panic("implement me")
+}
 
 func main() {
 	flag.Parse()
+	config := service.Config{
+		Name:        "knock-go",
+		DisplayName: "knock-go service",
+		Arguments:   []string{"-s"},
+	}
+	s, err := service.New(knock, &config)
+	if err != nil {
+		panic(err)
+	}
+	knock.servieLogger, _ = s.Logger(make(chan<- error))
+	switch flag.Arg(1) {
+	case "uninstall":
+		err = s.Uninstall()
+	case "install":
+		err = s.Install()
+	case "start":
+		err = s.Start()
+	case "stop":
+		err = s.Stop()
+	default:
+		run()
+	}
+	if err != nil {
+		panic(err)
+	}
+
+}
+func run() {
 	if *serverMode {
 		Listener()
 		return

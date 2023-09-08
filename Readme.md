@@ -12,6 +12,12 @@ go install github.com/Rehtt/knock-go@latest
 
 ## use
 
+### service
+```shell
+knock-go install
+knock-go start
+```
+
 ### server
 ```shell
 knock-go -s
