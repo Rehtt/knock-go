@@ -30,8 +30,7 @@ func (k *Knock) Start(s service.Service) error {
 }
 
 func (k *Knock) Stop(s service.Service) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func main() {
